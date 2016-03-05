@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<title></title>
+</head>
+<body>
+	<div id="container">
+		Coffee powder<input type="checkbox" value="Coffee powder">
+		Tea powder<input type="checkbox" value="Tea powder">
+		<button type="button" id="button1">Add</button>
+	</div>
+	<script type="text/javascript">
+		$.ajax({
+			url : "tempbasket.php?value1=Coffee powder,value2=Tea powder"
+			success : function(responseData){
+				console.log(responseData);
+			}
+		})
+	</script>
+</body>
+</html>
+
+
+<!-- when we click on btn it adds the new division
+	<button type="button" id="button1">Button1</button>
+	var counter = 0;
+	$("#container").on("click","#button1",function(){
+		counter=counter+1;
+		$("#container").append("<div class='clickdiv' style='width:100px;height:100px;background:red;margin-right:20px;float:left'>DIV"+counter+"</div>");
+	})
+	$("#container").on("click",".clickdiv",function(){
+		console.log($(this).text());
+	}) -->

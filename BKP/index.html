@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+	<title>search</title>
+	<style type="text/css">
+		h1
+		{
+			background-color : orange;
+			color : white;
+			text-align : center;
+			font-family: URW Chancery L;
+			font-size: 60px;
+			margin-bottom: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="heading">
+		<h1>WISH CART</h1>
+	</div>
+	<div class="login">
+		EMAIL ID:<input type="text" placeholder="Enter your email..." value="lakshmi@gmail.com" id="useremail">
+		PASSWORD:<input type="password" placeholder="password" value="lakshmi" id="userpassword"><br>
+		<input type="submit" value="submit" id="submitbutton">
+	</div>
+	<div class="row">
+		<div class="col-xs-9 col-md-8">
+			<input class="form-control" style="background-color:#cccccc" type="text" placeholder="Want to buy.." id="searchbox">
+		</div>
+		<div class="col-xs-3 col-md-4 categorydiv">
+			<img id="categoryicon" src="/basket/images/categories.png" width="30px" height="30px">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-4" id="searchresultsdiv" style="background-color:#cccccc"><ul></ul></div>
+	</div>
+	<div class="row">
+		<div class="col-xs-4" id="basketitems" style="background-color:#cccccc"></div>
+	</div>
+	<div class="row">
+		<div class="col-xs-8">
+			<div class="btn-group">
+				<button type="button"  id="saveitemsbutton" class="btn btn-lg btn-block" style="background-color:#609f80">Save basket items</button>	
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-4">
+			<div class="btn-group">
+				<button type="button"  id="additemstobasket" class="btn btn-lg btn-block" style="background-color:#609f80"></button>	
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var itemToSearch;
+		var count;
+		var selectedItems = [];
+		var arraycount;
+		var itemtodelete;
+		$("#searchbox").hide();
+		$("#additemstobasket").hide();
+		$("#categoryicon").hide();
+		$("#saveitemsbutton").hide();
+		$("#submitbutton").click(function(){
+			$(".login").hide();
+			$("#searchbox").show();
+			$("#categoryicon").show();
+			var email_id = $("#useremail").val();
+			var user_password = $("#userpassword").val();
+			$.ajax({
+				url : "login.php",
+				data : {
+					emailid : email_id,
+					password : user_password
+				},
+				type : "GET",
+				success : function(responseData){
+					console.log("success ajax",responseData);
+					$(".login").html(responseData);
+				},
+				error : function(xhr, status, errorThrown){
+					console.log("Error while making ajax",status)
+				}
+			})
+		})
+
+		$("body").on('change',":checkbox", function(){
+			count = $(":checkbox:checked").size();
+			console.log("check box clicked ",count);
+			$("#additemstobasket").text("Add"+" "+count+" "+"items to basket")
+		})
+
+		function showbasket()
+		{
+			$("#basketitems").empty();
+			arraycount = selectedItems.length;
+			console.log(arraycount);
+			for(var counter=0; counter < arraycount; counter++)
+			{
+				$("#basketitems").append($('<ul>').append($('<li>').append($('<span class=deleteimage task-id="'+counter+'">').append(selectedItems[counter].title).append('<img src=/basket/images/deleteicon.png width=20px height=20px>'))));
+			}
+		}
+
+		function deleteitem(spanelement)
+		{
+			itemtodelete = spanelement.attr("task-id");
+			itemidfromindex = selectedItems[itemtodelete].id;
+			console.log("ITEM TO DELETE",itemtodelete);
+			selectedItems.splice(itemtodelete,1);
+			console.log("deleted item ",itemtodelete);
+			spanelement.parent().remove();
+			console.log("item id from index",itemidfromindex);
+			return itemidfromindex;
+
+		}
+
+		$("#categoryicon").click(function(){
+			$("#basketitems").hide();
+			$("#saveitemsbutton").hide();
+			$.ajax({
+				url : "categories.php",
+				success : function(responseData){
+					console.log("success ajax",responseData);
+					$("#categorydiv").html("<br>",responseData)
+					// window.open("categories.php", "PopupWindow");
+				},
+				error : function(xhr, status, errorThrown){
+					console.log("Error while making ajax",status)
+				}
+			})
+		})
+
+		$("#additemstobasket").click(function(){
+			$("#searchresultsdiv").hide();
+			$("#additemstobasket").hide();
+			$("#basketitems").show();
+			$("#saveitemsbutton").show();
+			$(":checkbox:checked").each(function(){
+				var checkboxvalue = $(this).val();
+				console.log("checkboxvalue ",checkboxvalue)
+				itemid = $(this).attr('data-id');
+				console.log("itemid ",itemid);
+				selectedItems.push({id:itemid, title:checkboxvalue});
+				console.log(selectedItems);
+			})
+			showbasket();
+			$(".deleteimage").click(function(){
+				var itemidtodelete = deleteitem($(this));
+				console.log("item id to delete",itemidtodelete);
+				$.ajax({
+					url : "delete.php",
+					data : {
+						deleteitems : itemidtodelete
+					},
+					type : "GET",
+					success : function(responseData){
+						console.log("success ajax",responseData);
+						showbasket();
+					},
+					error : function(xhr, status, errorThrown){
+						console.log("Error while making ajax",status)
+					}
+				})
+			})
+		})
+
+		$("#saveitemsbutton").click(function(){
+			itemstosave = JSON.stringify(selectedItems);
+			console.log("ITEMS TO SAVE",itemstosave);
+			$.ajax({
+				url : "basketitems.php",
+				data : {
+					saveitems : itemstosave
+				},
+				type : "GET",
+				success : function(responseData){
+					console.log("success ajax",responseData);
+					showbasket();
+				},
+				error : function(xhr, status, errorThrown){
+					console.log("Error while making ajax",status)
+				}
+			})
+		})
+
+		$(document).ready(function(){
+			$("#additemstobasket").hide();
+			$("#searchresultsdiv").hide();
+			$("#searchbox").on("input",function(){
+				$("#additemstobasket").text("Add items to basket");
+				itemToSearch = $("#searchbox").val();
+				$.ajax({
+					url : "searchitems.php",
+					data : {
+						search : itemToSearch
+					},
+					type : "GET",
+					success : function(responseData){
+						console.log("success ajax",responseData);
+						$("#searchresultsdiv").html(responseData);
+					},
+					error : function(xhr, status, errorThrown){
+						console.log("Error while making ajax",status)
+					}
+				})
+				$("#searchresultsdiv").show();
+				$("#additemstobasket").show();
+				$("#saveitemsbutton").hide();
+				$("#basketitems").hide();
+			})
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<title>search item</title>
+	<style type="text/css">
+		#saveitemsbutton{
+			bottom: 0px;
+			/*top: 500px;*/
+			right: 10px;
+			max-height: 400px;
+			position: fixed;
+		}
+		#additemsbutton{
+			bottom: 0px;
+			/*top: 500px;*/
+			right: 10px;
+			max-height: 400px;
+			position: fixed;
+		}
+		.divider{
+			/*height: 0px;*/
+			/*margin: 9px 1px;*/
+		    overflow: hidden;
+		    background-color: #cccccc;
+		    margin: 0px 0 10px;
+		    border-bottom: 1px solid #999999;
+		}
+		.basketitems{
+			max-height: 370px;
+			background-color: #cccccc;
+			margin:0 0 10px;
+			overflow: scroll;
+		}
+		.heading{
+			background-color : orange;
+			color : white;
+			text-align : center;
+			font-family: FreeMono;
+			font-style: oblique;
+			font-size: 60px;
+			/*padding-right: 50px;*/
+			/*margin-bottom: 10px;*/
+		}
+		.inner-addon { 
+		    position: relative; 
+		}
+		 /*style icon */
+		.inner-addon .glyphicon {
+		  position: absolute;
+		  padding: 15px;
+		}
+		/* align icon */
+		/*.left-addon .glyphicon  { left:  0px;}*/
+		.right-addon .glyphicon { right: 0px;}
+		/* add padding  */
+		.left-addon input  { padding-left: 30px; }
+		.right-addon input { padding-right: 30px; }
+	</style>
+</head>
+<body>
+	<div class="row">
+		<div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
+			<div class="heading">
+				<h1>WISH CART</h1>
+			</div>
+			<p class="logout" style="float:right">Logout</p>
+			<img src="/images/homeicon.png" width="30" height="30" class="homeicon">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
+			<div class="inner-addon right-addon">
+			    <i class="glyphicon glyphicon-th-large"></i>
+			    <input type="text" placeholder="Want to buy...." id="searchbox" style="background-color:#cccccc" class="form-control input-lg" />
+			</div>
+		</div>
+	</div>
+	</br>
+	<div class="row">
+		<div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
+			<div class="basketitems"></div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
+			<button type="button" id="additemsbutton" style="background-color:#609f80" class="btn btn-lg btn-block">
+				<!-- <a href="/basket/basketitems.html"></a> -->
+			</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
+			<button type="button" id="saveitemsbutton" style="background-color:#609f80" class="btn btn-lg btn-block">SAVE</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="category"></div>
+	</div>
+	<script type="text/javascript" src="renders.js"></script>
+	<script type="text/javascript">
+		var basketItems = [];
+		var searchItems = [];
+		var itemstosave;
+		var itemtodelete;
+		var itemidfromindex;
+		var checkboxvalue;
+		var itemId;
+		var json_string;
+		
+		$(".logout").click(function(){
+			$.ajax({
+				url : "logout.php",
+				success : function(responseData){
+					console.log("Success ajax ",responseData);
+					window.location.replace("login.html");
+				},
+				error : function(xhr,status,errorThrown){
+					console.log("Error while making ajax ",status);
+				}
+			})
+		})
+		$(".homeicon").click(function(){
+			$("#searchbox").val("");
+			$(".basketitems").show();
+			$("#saveitemsbutton").prop("disabled",true);
+			render_basket(basketItems,".basketitems");
+		})
+		$("#additemsbutton").click(function(){
+			$("#additemsbutton").hide();
+			$(".basketitems").show();
+			$("#saveitemsbutton").show();
+			$("#saveitemsbutton").prop("disabled",false);
+			$(":checkbox:checked").each(function(){
+				checkboxvalue = $(this).val();
+				console.log("check box value ",checkboxvalue);
+				itemid = $(this).attr('data-id');
+				console.log("item id",itemid);
+				basketItems.push({itemId:itemid,itemName:checkboxvalue});
+				console.log("search selected items ",basketItems);
+			})
+			console.log("add items basket Items",basketItems);
+			render_basket(basketItems,".basketitems");
+			$("#searchbox").val("");
+		})
+
+		$(".basketitems").on("click",".deleteicon",function(){
+			itemtodelete = $(this).attr("task-id");
+			console.log("itemtodelete",itemtodelete);
+			itemidtodelete = basketItems[itemtodelete].itemId;
+			var deleteditem = basketItems.splice(itemtodelete,1);
+			console.log("item id to delete",deleteditem);
+			$.ajax({
+				url : "basket/delete.php",
+				data : {
+					deleteitem : itemidtodelete
+				},
+				type : "GET",
+				success : function(responseData){
+					console.log("success ajax",responseData);
+					render_basket(basketItems,".basketitems");
+				},
+				error : function(xhr, status, errorThrown){
+					console.log("Error while making ajax",status)
+				}
+			})
+		})
+
+		$("#saveitemsbutton").click(function(){
+			$(".basketitems").show();
+			console.log("save button basketItems",basketItems);
+			var json_basket_Items = JSON.stringify(basketItems);
+			console.log("ITEMS TO SAVE",json_basket_Items);
+			$.ajax({
+				url : "basket/basketitems.php",
+				data : {
+					saveitems : json_basket_Items
+				},
+				type : "GET",
+				success : function(responseData){
+					console.log("success ajax",responseData);
+					render_basket(basketItems,".basketitems");
+					alert("Items saved successfully");
+				},
+				error : function(xhr, status, errorThrown){
+					console.log("Error while making ajax",status)
+				}
+			})
+		})
+
+		$(".glyphicon").click(function(){
+			$("#searchbox").val("");
+			$(".basketitems").empty();
+			$("#additemsbutton").hide();
+			$(".basketitems").hide();
+			$("#saveitemsbutton").hide();
+			$.ajax({
+				url : "/basket/index.php/categories",
+				success : function(responseData){
+					$(".category").empty();
+					var json_categories = $.parseJSON(responseData);
+					for(var counter = 0;counter<json_categories.length;counter++){
+						var json_string = json_categories[counter].categoryname;
+						var string_first_letter = json_string.charAt(0);
+						console.log("first letter ",string_first_letter);
+						$(".category").append($("<div class='col-xs-4 col-md-4 col-sm-4 col-lg-4'>").append($("<div class='categoriesdiv' style='background-color:#ad8592;text-align:center;margin:0 0 30px' category-id='"+json_categories[counter].categoryId+"'>").append($("<p style='text-align:center'>"+string_first_letter+"</p>")).append(json_string+"</div></div>")));
+						if (counter == 2) {
+							$(".category").append("<br>");
+						}
+					}
+					console.log("success ajax",responseData);
+				},
+				error : function(xhr,status,errorThrown){
+					console.log("Error while making ajax ",status);
+				}
+			})	
+			
+			$(".category").on("click",".categoriesdiv",function(){
+				$(".categoriesdiv").hide();
+				$(".basketitems").show();
+				$("#additemsbutton").show();
+				$("#additemsbutton").text("Add items to basket");
+				var click_result = $(this).attr('category-id');
+				$.ajax({
+					url : "get_category_items.php",
+					data : {
+						categoryid : click_result
+					},
+					type : "GET",
+					success : function(responseData){
+						var searchItems = $.parseJSON(responseData);
+						console.log(searchItems);
+						render_items(searchItems,".basketitems");
+						console.log("Success ajax ",responseData);
+					},
+					error : function(xhr,status,errorThrown){
+						console.log("Error while making ajax ",status)
+					}
+				})
+			})
+		})
+
+		$("#searchbox").click(function(){
+			$(".categoriesdiv").hide();
+			$(".basketitems").empty();
+			$("#additemsbutton").hide();
+			$(".basketitems").hide();
+			$("#saveitemsbutton").hide();
+			$("#searchbox").on("input",function(){
+				$("#additemsbutton").text("Add items to basket");
+				itemToSearch = $("#searchbox").val();
+				if (itemToSearch == "") {
+					$(".basketitems").text("Please enter text to search");
+				}else{
+					$.ajax({
+						url : "index.php/basket/item_search_results",
+						data : {
+							searchkeyword : itemToSearch
+						},
+						type : "GET",
+						success : function(responseData){
+							console.log("success ajax",responseData);
+							searchItems = $.parseJSON(responseData);
+							if(searchItems == 0){
+								$(".basketitems").text("Sorry there are no search results");
+							}
+							else{
+								render_items(searchItems,".basketitems");
+							}
+						},
+						error : function(xhr, status, errorThrown){
+							console.log("Error while making ajax",status);
+						}
+					})
+				}
+				$(".basketitems").show();
+				$("#additemsbutton").show();
+			})
+		})
+
+		$(document).ready(function(){
+			$(".basketitems").show();
+			$("#additemsbutton").hide();
+
+			$.ajax({
+				url : "index.php/basket",
+				success : function(responseData){
+					console.log("responseData",responseData);
+					var saved_basket_items = $.parseJSON(responseData);
+					basketItems=basketItems.concat(saved_basket_items);
+					render_basket(basketItems,".basketitems");
+					$("#saveitemsbutton").prop("disabled",true);
+				},
+				error : function(xhr, status, errorThrown){
+					console.log("Error while making ajax",status)
+				}
+			})
+		})
+	</script>
+</body>
+</html>

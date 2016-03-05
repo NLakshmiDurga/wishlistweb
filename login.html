@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<title>login</title>
+	<style type="text/css">
+		.heading{
+			background-color : orange;
+			color : white;
+			text-align : center;
+			font-family: URW Chancery L;/*FreeMono is a font name*/
+			font-style: oblique;
+			font-size: 60px;
+			/*padding-right: 50px;*/
+			/*margin-bottom: 10px;*/
+		}
+	</style>
+</head>
+<body>
+	<div class="row">
+		<div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
+			<div class="heading">
+				<h1>WISH CART</h1>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
+				<ul class="nav nav-tabs">
+					<li class="login"><a href="#">Login</a></li>
+					<li class="signup"><a href="#">Signup</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(".login").click(function(){
+			$(".container").load("loginform.html");
+			$(".container").on("click","#loginbutton",function(){
+				var user_email = $("#email").val();
+				console.log("user_email ",user_email);
+				var user_password = $("#pswd").val();
+				console.log("user_password",user_password);
+				$.ajax({
+					url : "index.php/users/login",
+					data : {
+						emailid : user_email,
+						password : user_password
+					},
+					type : "POST",
+					success : function(responseData){
+						
+						// $response_json = $.parseJSON(responseData);
+						// console.log("response json ",response_json);
+						window.open("index.html");
+						$(".container").show();
+						console.log("success ajax",responseData);
+					},
+					error : function(xhr,status,errorThrown){
+						console.log("Error while making ajax",status);
+					}
+				})
+			})
+
+		})
+		
+		$(".signup").click(function(){
+			$(".container").load("sign_up.html");
+			$(".container").on("click","#signupbutton",function(){
+				var user_name = $("#username").val();
+				var user_email = $("#email").val();
+				var user_password = $("#pswd").val();
+				$.ajax({
+					url : "signUp.php",
+					data : {
+						username : user_name,
+						emailid : user_email,
+						password : user_password
+					},
+					type : "GET",
+					success : function(responseData){
+						console.log("Success ajax ",responseData);
+						alert("Registered successfully");
+						$(".container").show();
+					},
+					error : function(xhr,status,errorThrown){
+						console.log("Error while making ajax",status);
+					}
+				})
+			})
+		})
+	</script>
+</body>
+</html>

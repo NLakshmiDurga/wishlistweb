@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<title>basket items</title>
+	<style type="text/css">
+		#saveitemsbutton{
+			bottom: 0;
+			right: 0;
+			position: fixed;
+			z-index: 3000;
+		}
+		.divider{
+			/*height: 0px;*/
+		    /*margin: 9px 1px;*/
+		    overflow: hidden;
+		    background-color: #cccccc;
+		    border-bottom: 1px solid #999999;
+		}
+		.heading{
+			background-color : orange;
+			color : white;
+			text-align : center;
+			font-family: FreeMono;
+			font-style: oblique;
+			font-size: 60px;
+			/*padding-right: 50px;*/
+			/*margin-bottom: 10px;*/
+		}
+		.inner-addon { 
+		    position: relative; 
+		}
+
+		 /*style icon */
+		.inner-addon .glyphicon {
+		  position: absolute;
+		  padding: 15px;
+		}
+
+		/* align icon */
+		.right-addon .glyphicon { right: 0px;}
+	</style>
+</head>
+<body>
+	<div class="row">
+		<div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
+			<div class="heading">
+				<h1>WISH CART</h1>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
+			<div class="inner-addon right-addon">
+			    <i class="glyphicon glyphicon-th-large"></i>
+			    <input type="text" placeholder="Want to buy...." id="searchbox" style="background-color:#cccccc" class="form-control input-lg" />
+			</div>
+		</div>
+	</div>
+	<br>
+	<p style="text-align:center">
+		5 items to buy
+	</p>
+	<div class="row">
+		<div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
+			<div class="basketitems" style="background-color:#cccccc">
+				
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
+					<button type="button" id="saveitemsbutton" style="background-color:#609f80" class="btn btn-lg btn-block">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
