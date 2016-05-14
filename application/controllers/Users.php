@@ -13,7 +13,7 @@
 			$user_emailid = $_POST['emailid'];
 			$user_password = $_POST['password'];
 			$user_sign_up = $this->User_authentication->register($user_name,$user_emailid,$user_password);
-			print_r($user_sign_up);
+			return($user_sign_up);
 			// if (!$user_sign_up) {
 			// 	print_r($user_sign_up);
 			// 	echo "Successfully inserted";
@@ -27,7 +27,6 @@
 			$email_id = $_POST['emailid'];
 			$password = $_POST['password'];
 			$user_login = $this->User_authentication->user_log_in($email_id,$password);
-			print_r($user_login);
 			return $user_login;
 		}
 		// public function logout()
