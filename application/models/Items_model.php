@@ -63,16 +63,17 @@ class Items_model extends CI_Model
         }
         
     }
-    public function get_search_results($searchkeyword)
+    public function get_search_results()
     {
-        $query = $this->db->query("SELECT * FROM items WHERE item_name LIKE '$searchkeyword%'");
+        $query = $this->db->query("SELECT * FROM items");
         $result_set = $query->result();
         $items = array();
         foreach ($result_set as $row) {
             $items[] = $row;
         }
-        print_r($items);
-        return $items;
+        //print_r($items);
+        $itemslist = json_encode($items);
+        return $itemslist;
     }
     public function save_items($json_object,$itemstosave)
     {
