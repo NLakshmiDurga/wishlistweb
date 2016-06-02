@@ -38,7 +38,7 @@ class Basket extends CI_Controller
 		$search_items = $this->Items_model->get_search_results();
 		$items = array();
 		$items['results'] = $search_items;
-		return $items;
+		//return $items;
 		//$this->load->view('Search_view',$items);
 		
 	}
