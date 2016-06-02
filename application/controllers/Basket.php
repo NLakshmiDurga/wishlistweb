@@ -34,11 +34,12 @@ class Basket extends CI_Controller
 	}
 	public function item_search_results()
 	{
-		$search_keyword = $_GET['searchkeyword'];
-		$search_items = $this->Items_model->get_search_results($search_keyword);
+		//$search_keyword = $_GET['searchkeyword'];
+		$search_items = $this->Items_model->get_search_results();
 		$items = array();
 		$items['results'] = $search_items;
-		$this->load->view('Search_view',$items);
+		return $items;
+		//$this->load->view('Search_view',$items);
 		
 	}
 	public function save_user_items()
