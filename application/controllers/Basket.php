@@ -22,12 +22,12 @@ class Basket extends CI_Controller
 	public function add_user_task(){
 		$user_token = $_POST['token'];
 		$user_task = $_POST['task'];
-		$user_id = $this->Items_model->get_userid_from_token($get_token);
-		$add_task = $this->Items_model->add_task($user_id,$task);
+		$user_id = $this->Items_model->get_userid_from_token($user_token);
+		$add_task = $this->Items_model->add_task($user_id,$user_task);
 	}
 	public function get_user_tasks(){
 		$user_token = $_POST['token'];
-		$userid = $this->Items_model->get_userid_from_token($get_token);
+		$userid = $this->Items_model->get_userid_from_token($user_token);
 		$user_tasks = $this->Items_model->get_tasks($userid);
 		// return $user_tasks;
 		return($user_tasks);
@@ -38,7 +38,7 @@ class Basket extends CI_Controller
 		$search_items = $this->Items_model->get_search_results();
 		$items = array();
 		$items['results'] = $search_items;
-		//return $items;
+		return $items;
 		//$this->load->view('Search_view',$items);
 		
 	}
