@@ -1,11 +1,11 @@
 <?php
 class Items_model extends CI_Model
 {
-	public function __construct()
-	{
+    public function __construct()
+    {
         // $this->load->library('session');
         $this->load->database('db_connection');
-    }   
+    }
     public function get_userid_from_token($get_token)
     {
 
@@ -37,7 +37,7 @@ class Items_model extends CI_Model
     {
         $parse_json = json_decode($json_object);
         $userid = $parse_json->user_id;
-    	$user_saved_items = array();
+        $user_saved_items = array();
         $sql = "SELECT userbasket.item_id,items.item_name from userbasket,items  where userbasket.item_id=items.item_id and userbasket.user_id = ?";
         $query = $this->db->query($sql,array($userid));
         $result_set = $query->result();
@@ -53,7 +53,7 @@ class Items_model extends CI_Model
             $user_true_json_items = json_encode($user_details);
             return $user_true_json_items;
         }
-        else
+         else
         {
             $user_details = array();
             $user_details['status'] = "False";
@@ -61,19 +61,17 @@ class Items_model extends CI_Model
             $user_false_json = json_encode($user_details);
             return $user_false_json;
         }
-        
     }
-    public function get_search_results($search_keyword)
+    public function get_search_results($searchkeyword)
     {
-        $query = $this->db->query("SELECT * FROM items WHERE item_name LIKE 'search_keyword%'");
+        $query = $this->db->query("SELECT * FROM items WHERE item_name LIKE '$searchkeyword%'");
         $result_set = $query->result();
         $items = array();
         foreach ($result_set as $row) {
             $items[] = $row;
         }
-        //print_r($items);
-        $itemslist = json_encode($items);
-        return $itemslist;
+        print_r($items);
+        return $items;
     }
     public function save_items($json_object,$itemstosave)
     {
@@ -89,7 +87,7 @@ class Items_model extends CI_Model
             $user_details['message'] = "Your query is successful";
             $user_true_save_items_json = json_encode($user_details);
             return $user_true_save_items_json;
-        }        
+        }
     }
     public function delete_item($json_object,$itemid)
     {
@@ -99,21 +97,20 @@ class Items_model extends CI_Model
         $result_set = $this->db->query($query,array($userid,$itemid));
         $affected_rows = $this->db->affected_rows();
         if ($affected_rows>0) {
-                $user_details = array();
-                $user_details['status'] = "True";
-                $user_details['message'] = "Your query is successful";
-                $delete_items_true_json = json_encode($user_details);
-                return $delete_items_true_json;
-            }
-            else
-            {
-                $user_details = array();
-                $user_details['status'] = "False";
-                $user_details['message'] = "There are no records";
-                $delete_items_false_json = json_encode($user_details);
-                return $delete_items_false_json;
-            }
-        
+            $user_details = array();
+            $user_details['status'] = "True";
+            $user_details['message'] = "Your query is successful";
+            $delete_items_true_json = json_encode($user_details);
+            return $delete_items_true_json;
+        }
+        else
+        {
+            $user_details = array();
+            $user_details['status'] = "False";
+            $user_details['message'] = "There are no records";
+            $delete_items_false_json = json_encode($user_details);
+            return $delete_items_false_json;
+        }
     }
     public function get_categories()
     {

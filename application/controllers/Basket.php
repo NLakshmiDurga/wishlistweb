@@ -13,6 +13,7 @@ class Basket extends CI_Controller
 		$useridfromtoken = $this->Items_model->get_userid_from_token($get_token);
 		// print_r($useridfromtoken);
 		$saved_items = $this->Items_model->user_saved_items($useridfromtoken);
+		print_r($saved_items);
 		return $saved_items;
 		// $user_items = array();
 		// $user_items['saved_items'] = $saved_items;
@@ -30,17 +31,16 @@ class Basket extends CI_Controller
 		$userid = $this->Items_model->get_userid_from_token($user_token);
 		$user_tasks = $this->Items_model->get_tasks($userid);
 		// return $user_tasks;
-		return($user_tasks);
+		print_r($user_tasks);
 	}
 	public function item_search_results()
 	{
-		$search_keyword = $_GET['keyword'];
+		$search_keyword = $_GET['searchkeyword'];
 		$search_items = $this->Items_model->get_search_results($search_keyword);
 		$items = array();
 		$items['results'] = $search_items;
-		return $items;
-		//$this->load->view('Search_view',$items);
-		
+		$this->load->view('Search_view',$items);
+
 	}
 	public function save_user_items()
 	{
@@ -48,6 +48,7 @@ class Basket extends CI_Controller
 		$user_token = $_POST['token'];
 		$useridfromtoken = $this->Items_model->get_userid_from_token($user_token);
 		$user_items_to_save = $this->Items_model->save_items($useridfromtoken,$items_to_save);
+		print_r($user_items_to_save);
 		return $user_items_to_save;
 	}
 	public function delete()
@@ -57,7 +58,7 @@ class Basket extends CI_Controller
 		$itemid = $_POST['item_id'];
 		$useridfromtoken = $this->Items_model->get_userid_from_token($user_token);
 		$deleted_item = $this->Items_model->delete_item($useridfromtoken,$itemid);
-		//print_r($deleted_item);
+		print_r($deleted_item);
 		return $deleted_item;
 		// echo $deleted_item;
 	}
