@@ -9,7 +9,8 @@ class Users extends CI_controller
 	}
 	public function signup()
 	{
-		if(isset($_POST['username']) && isset($_POST['emailid']) && isset($_POST['password']) && isset($_POST['type'])){
+		if(isset($_POST['username']) && isset($_POST['emailid']) && isset($_POST['password']) && isset($_POST['type']))
+		{
 			
 			$user_name = $_POST['username'];
 			$user_emailid = $_POST['emailid'];
@@ -23,17 +24,26 @@ class Users extends CI_controller
 			$user_signup_response['status'] = "False";
 			$user_signup_response['message'] = "invalid payload";
 			echo json_encode($user_signup_response);
+			return json_encode($user_signup_response);
 		}
 
 
 	}
 	public function login()
 	{
-		$email_id = $_POST['emailid'];
-		$password = $_POST['password'];
-		$user_login = $this->User_authentication->user_log_in($email_id,$password);
-		print_r($user_login);
-		return $user_login;
+		if(isset($_POST['emailid']) && isset($_POST['password'])) {
+			$email_id = $_POST['emailid'];
+			$password = $_POST['password'];
+			$user_login = $this->User_authentication->user_log_in($email_id, $password);
+			print_r($user_login);
+			return $user_login;
+		}
+		else{
+			$user_signup_response['status'] = "False";
+			$user_signup_response['message'] = "invalid payload";
+			echo json_encode($user_signup_response);
+			return json_encode($user_signup_response);
+		}
 	}
                 // public function logout()
                 // {

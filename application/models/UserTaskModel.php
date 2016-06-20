@@ -46,6 +46,7 @@ class UserTaskModel extends CI_Model
             $user_task_details['message'] = "Your query is successful";
             $user_task_details['tasks'] = $tasks;
             $tasks_json_true = json_encode($user_task_details);
+//            print_r($tasks_json_true);
             return $tasks_json_true;
         }
         else

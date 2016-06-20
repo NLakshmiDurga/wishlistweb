@@ -10,12 +10,19 @@ class User_authentication extends CI_Model
 	{
 		$check_query = $this->db->query("SELECT email_id From users WHERE email_id='$email_id'");
 		if ($check_query->num_rows() != 0){
-			echo "User already exist";
+			$check_emailid = array();
+			$check_emailid['status'] = "False";
+			$check_emailid['message'] = "User already exist";
+			return json_encode($check_emailid);
+//			return $check_emailid;
+//			print_r(json_encode($check_emailid));
+//			$check_emailid['message'] = "User already exist";
+//			echo "User already exist";
 		}
 		else{
 			$token_id = uniqid();
 			$query = $this->db->query("INSERT INTO users (user_name,email_id,password,token,signup_type) VALUES ('$user_name','$email_id','$password','$token_id','$type')");
-			print_r($query);
+//			print_r($query);
 			$affected_rows = $this->db->affected_rows();
 			if($affected_rows > 0){
 				$user_signup_response = array();
@@ -24,13 +31,7 @@ class User_authentication extends CI_Model
 				$user_signup_response['user_token'] = $token_id;
 				$user_signup_details = json_encode($user_signup_response);
 				return $user_signup_details;
-			}
-			else{
-				$user_signup_responsef = array();
-				$user_signup_responsef['status'] = "False";
-				$user_signup_responsef['message'] = "The token is not generated";
-				$user_signup_details_false = json_encode($user_signup_responsef);
-				return $user_signup_details_false;
+//				print_r($user_signup_details);
 			}
 		}
 

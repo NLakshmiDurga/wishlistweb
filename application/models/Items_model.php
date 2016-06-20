@@ -70,8 +70,13 @@ class Items_model extends CI_Model
         foreach ($result_set as $row) {
             $items[] = $row;
         }
-        print_r($items);
-        return $items;
+        $user_details = array();
+        $user_details['status'] = "True";
+        $user_details['message'] = "Your query is successful";
+        $user_details['searchitems'] = $items;
+        return json_encode($user_details);
+//        print_r($items);
+//        return $items;
     }
     public function save_items($json_object,$itemstosave)
     {
