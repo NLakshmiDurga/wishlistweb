@@ -87,8 +87,8 @@ class UserTaskModel extends CI_Model
         $date = date('Y-m-d H:i:s');
         $sql = "UPDATE user_tasks SET status = ?,modified_task_on = ? WHERE user_id = ? AND task_id = ?";
         $query = $this->db->query($sql,array($status,$date,$userid,$task_id));
-        $str = $this->db->last_query();
-        print_r($str);
+//        $str = $this->db->last_query();
+//        print_r($str);
         $affected_rows = $this->db->affected_rows();
         if ($affected_rows>0) {
             $user_details = array();
