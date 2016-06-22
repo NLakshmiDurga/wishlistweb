@@ -43,7 +43,7 @@ class UserTaskModel extends CI_Model
             }
             $user_task_details = array();
             $user_task_details['status'] = "True";
-            $user_task_details['message'] = "Your query is successful";
+            $user_task_details['message'] = "User saved tasks";
             $user_task_details['tasks'] = $tasks;
             $tasks_json_true = json_encode($user_task_details);
 //            print_r($tasks_json_true);
@@ -68,7 +68,7 @@ class UserTaskModel extends CI_Model
         if ($affected_rows>0) {
             $user_details = array();
             $user_details['status'] = "True";
-            $user_details['message'] = "Your query is successful";
+            $user_details['message'] = "Deleted your task";
             $delete_items_true_json = json_encode($user_details);
             return $delete_items_true_json;
         }
@@ -93,7 +93,7 @@ class UserTaskModel extends CI_Model
         if ($affected_rows>0) {
             $user_details = array();
             $user_details['status'] = "True";
-            $user_details['message'] = "Your query is successful";
+            $user_details['message'] = "Updated your task";
             $delete_items_true_json = json_encode($user_details);
             return $delete_items_true_json;
         }
