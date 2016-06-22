@@ -53,6 +53,7 @@ class User_authentication extends CI_Model
 			$user_auth['token'] = $token;
 			$json_auth_true_object = json_encode($user_auth);
 			return $json_auth_true_object;
+			print_r($json_auth_true_object);
 		}
 		else
 		{

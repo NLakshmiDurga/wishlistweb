@@ -17,8 +17,9 @@ class Users extends CI_controller
 			$user_password = $_POST['password'];
 			$sinup_type = $_POST['type'];
 			$user_sign_up = $this->User_authentication->register($user_name,$user_emailid,$user_password,$sinup_type);
-			print_r($user_sign_up);
+//			print_r($user_sign_up);
 			return $user_sign_up;
+			echo $user_sign_up;
 		}
 		else{
 			$user_signup_response['status'] = "False";
@@ -35,7 +36,8 @@ class Users extends CI_controller
 			$email_id = $_POST['emailid'];
 			$password = $_POST['password'];
 			$user_login = $this->User_authentication->user_log_in($email_id, $password);
-			print_r($user_login);
+//			print_r($user_login);
+			echo $user_login;
 			return $user_login;
 		}
 		else{
