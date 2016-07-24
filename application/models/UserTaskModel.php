@@ -29,11 +29,11 @@ class UserTaskModel extends CI_Model
             return $user_add_tasks_json_false;
         }
     }
-    public function get_tasks($userid){
+    public function get_tasks($userid,$status){
         $parse_json = json_decode($userid);
         $userid = $parse_json->user_id;
-        $sql = "SELECT task_id,task,status FROM user_tasks WHERE user_id = ?";
-        $query = $this->db->query($sql,array($userid));
+        $sql = "SELECT task_id,task,status FROM user_tasks WHERE user_id = ? AND status = ?";
+        $query = $this->db->query($sql,array($userid,$status));
         $result_set = $query->result();
         $tasks = array();
         $affected_rows = $this->db->affected_rows();
