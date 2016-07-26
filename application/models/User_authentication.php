@@ -53,15 +53,16 @@ class User_authentication extends CI_Model
 			$user_auth['token'] = $token;
 			$json_auth_true_object = json_encode($user_auth);
 			return $json_auth_true_object;
-			print_r($json_auth_true_object);
+//			print_r($json_auth_true_object);
 		}
 		else
 		{
 			$user_auth = array();
 			$user_auth['status'] = "False";
-			$user_auth['message'] = "There is no token";
+			$user_auth['message'] = "There is no emailid or password exist";
 			$json_auth_false_object = json_encode($user_auth);
 			return $json_auth_false_object;
+//			print_r($json_auth_false_object);
 		}
 	}	
 }

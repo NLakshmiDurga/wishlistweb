@@ -41,10 +41,10 @@ class Users extends CI_controller
 			return $user_login;
 		}
 		else{
-			$user_signup_response['status'] = "False";
-			$user_signup_response['message'] = "invalid payload";
-			echo json_encode($user_signup_response);
-			return json_encode($user_signup_response);
+			$user_signin_response['status'] = "False";
+			$user_signin_response['message'] = "invalid payload";
+			echo json_encode($user_signin_response);
+			return json_encode($user_signin_response);
 		}
 	}
                 // public function logout()
