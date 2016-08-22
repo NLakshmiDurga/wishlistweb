@@ -17,20 +17,29 @@ class Usertasks extends CI_Controller
 		return($add_task);
 	}
 	public function get_user_tasks(){
-		$user_token = $_POST['token'];
-		$status = $_POST['status'];
-		$userid = $this->Items_model->get_userid_from_token($user_token);
-		$user_tasks = $this->UserTaskModel->get_tasks($userid,$status);
-		print_r($user_tasks);
-		return($user_tasks);
+		if(isset($_POST['status']) && isset($_POST['token'])){
+			$user_token = $_POST['token'];
+			$status = $_POST['status'];
+			$userid = $this->Items_model->get_userid_from_token($user_token);
+			$user_tasks = $this->UserTaskModel->get_tasks($userid,$status);
+			print_r($user_tasks);
+			return($user_tasks);
+		}
+		else{
+			$user_tasks_response['status'] = "False";
+			$user_tasks_response['message'] = "invalid payload";
+			echo json_encode($user_tasks_response);
+			return json_encode($user_tasks_response);
+		}
 	}
+
 	public function delete_user_task(){
 		$user_token = $_POST['token'];
 		$user_task_id = $_POST['taskid'];
 		$userid = $this->Items_model->get_userid_from_token($user_token);
 		$user_tasks = $this->UserTaskModel->delete_task($user_task_id,$userid);
-		return($user_tasks);
 		print_r($user_tasks);
+		return($user_tasks);
 	}
 	public function update_user_task(){
 		$user_token = $_POST['token'];

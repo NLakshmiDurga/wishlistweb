@@ -11,9 +11,13 @@ class UserTaskModel extends CI_Model
         $parse_json = json_decode($userid);
         $userid = $parse_json->user_id;
         $date = date('Y-m-d H:i:s'); 
-        $sql = "INSERT INTO user_tasks (user_id,task,added_task_on) VALUES(?,?,?)";
-        $query = $this->db->query($sql,array($userid,$task,$date));
+//        $sql = "INSERT INTO user_tasks (user_id,task,added_task_on) VALUES(?,?,?)";
+        $query = $this->db->query("INSERT INTO usertasks (user_id,task,added_task_on) VALUES('$userid','$task','$date')");
+//        echo "error msg",$this->db->_error_message();
+//        echo "error num",$this->db->_error_number();
+//        print_r($query);
         $affected_rows = $this->db->affected_rows();
+//        print_r($affected_rows);
         if ($affected_rows>0) {
             $user_add_tasks = array();
             $user_add_tasks['status'] = "True";
@@ -32,7 +36,7 @@ class UserTaskModel extends CI_Model
     public function get_tasks($userid,$status){
         $parse_json = json_decode($userid);
         $userid = $parse_json->user_id;
-        $sql = "SELECT task_id,task,status FROM user_tasks WHERE user_id = ? AND status = ?";
+        $sql = "SELECT task_id,task,status FROM usertasks WHERE user_id = ? AND status = ?";
         $query = $this->db->query($sql,array($userid,$status));
         $result_set = $query->result();
         $tasks = array();
@@ -62,7 +66,7 @@ class UserTaskModel extends CI_Model
         $parse_json = json_decode($userid);
         $userid = $parse_json->user_id;
 
-        $sql = "DELETE FROM user_tasks WHERE user_id = ? AND task_id = ?";
+        $sql = "DELETE FROM usertasks WHERE user_id = ? AND task_id = ?";
         $query = $this->db->query($sql,array($userid,$task_id));
         $affected_rows = $this->db->affected_rows();
         if ($affected_rows>0) {
@@ -85,7 +89,7 @@ class UserTaskModel extends CI_Model
         $parse_json = json_decode($userid);
         $userid = $parse_json->user_id;
         $date = date('Y-m-d H:i:s');
-        $sql = "UPDATE user_tasks SET status = ?,modified_task_on = ? WHERE user_id = ? AND task_id = ?";
+        $sql = "UPDATE usertasks SET status = ?,modified_task_on = ? WHERE user_id = ? AND task_id = ?";
         $query = $this->db->query($sql,array($status,$date,$userid,$task_id));
 //        $str = $this->db->last_query();
 //        print_r($str);
