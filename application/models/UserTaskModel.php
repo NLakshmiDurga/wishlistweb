@@ -33,40 +33,11 @@ class UserTaskModel extends CI_Model
             return $user_add_tasks_json_false;
         }
     }
-    public function get_tasks_with_status($userid,$status){
+    public function get_tasks($userid,$status){
         $parse_json = json_decode($userid);
         $userid = $parse_json->user_id;
         $sql = "SELECT task_id,task,status FROM usertasks WHERE user_id = ? AND status = ?";
         $query = $this->db->query($sql,array($userid,$status));
-        $result_set = $query->result();
-        $tasks = array();
-        $affected_rows = $this->db->affected_rows();
-        if ($affected_rows>0) {
-            foreach ($result_set as $row) {
-                $tasks[] = $row;
-            }
-            $user_task_details = array();
-            $user_task_details['status'] = "True";
-            $user_task_details['message'] = "User saved tasks";
-            $user_task_details['tasks'] = $tasks;
-            $tasks_json_true = json_encode($user_task_details);
-//            print_r($tasks_json_true);
-            return $tasks_json_true;
-        }
-        else
-        {
-            $user_task_details = array();
-            $user_task_details['status'] = "False";
-            $user_task_details['message'] = "There are no tasks yet";
-            $tasks_json_false = json_encode($user_task_details);
-            return $tasks_json_false;
-        }
-    }
-    public function get_tasks($userid){
-        $parse_json = json_decode($userid);
-        $userid = $parse_json->user_id;
-        $sql = "SELECT task_id,task FROM usertasks WHERE user_id = ?";
-        $query = $this->db->query($sql,array($userid));
         $result_set = $query->result();
         $tasks = array();
         $affected_rows = $this->db->affected_rows();
