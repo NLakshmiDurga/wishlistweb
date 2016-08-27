@@ -17,11 +17,19 @@ class Usertasks extends CI_Controller
 		return($add_task);
 	}
 	public function get_user_tasks(){
+		$user_token = $_POST['token'];
+		$userid = $this->Items_model->get_userid_from_token($user_token);
+		$user_tasks = $this->UserTaskModel->get_tasks($userid);
+		print_r($user_tasks);
+		return($user_tasks);
+	}
+	
+	public function get_user_tasks_with_status(){
 		if(isset($_POST['status']) && isset($_POST['token'])){
 			$user_token = $_POST['token'];
 			$status = $_POST['status'];
 			$userid = $this->Items_model->get_userid_from_token($user_token);
-			$user_tasks = $this->UserTaskModel->get_tasks($userid,$status);
+			$user_tasks = $this->UserTaskModel->get_tasks_with_status($userid,$status);
 			print_r($user_tasks);
 			return($user_tasks);
 		}
