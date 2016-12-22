@@ -3,6 +3,7 @@ class Users extends CI_controller
 {
 	public function __construct()
 	{
+		header('Access-Control-Allow-Origin:*');
 		parent::__construct();
 		// $this->load->library('session');
 		$this->load->model('User_authentication');
