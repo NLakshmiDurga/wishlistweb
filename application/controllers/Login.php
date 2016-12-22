@@ -8,11 +8,11 @@
     class Login extends CI_Controller{
         public function __construct()
         {
+            header('Access-Control-Allow-Origin:*');
             parent::__construct();
             // $this->load->library('session');
         }
         public function signin(){
-            header('Access-Control-Allow-Origin:*');
             $postdata = file_get_contents("php://input");
             $request = json_decode($postdata);
             echo "\nemailid : ",$request->email;
