@@ -3,8 +3,6 @@ class Users extends CI_controller
 {
 	public function __construct()
 	{
-		header('Access-Control-Allow-Origin:*');
-		header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 		parent::__construct();
 		// $this->load->library('session');
 		$this->load->model('User_authentication');
@@ -34,6 +32,7 @@ class Users extends CI_controller
 	}
 	public function login()
 	{
+		header('Access-Control-Allow-Origin:*');
 		if(isset($_POST['emailid']) && isset($_POST['password'])) {
 			$email_id = $_POST['emailid'];
 			$password = $_POST['password'];
